@@ -85,11 +85,13 @@ public class AuthHandler : MonoBehaviour
     }
 }
 
+[System.Serializable]
 public class AuthData
 {
     public string username;
     public string password;
     public Usuario usuario;
+    public string token;
 }
 
 [System.Serializable]
