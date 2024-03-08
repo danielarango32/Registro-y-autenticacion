@@ -23,7 +23,10 @@ public class AuthHandler : MonoBehaviour
 
     public void enviarLogin()
     {
-
+        AuthData data = new AuthData();
+        string username = GameObject.Find("InputFieldUsername").GetComponent<TMP_InputField>().text;
+        string password = GameObject.Find("InputFieldPassword").GetComponent<TMP_InputField>().text;
+        StartCoroutine("Login", JsonUtility.ToJson(data));
     }
 
     IEnumerator Registro(string json)
@@ -46,7 +49,7 @@ public class AuthHandler : MonoBehaviour
             if (request.responseCode == 200)
             {
                 Debug.Log("Registro exitoso"); // no ponerlo solo en consola
-                StartCoroutine(Login);
+                StartCoroutine("Login", json);
             }
             else
             {
@@ -75,7 +78,9 @@ public class AuthHandler : MonoBehaviour
             if (request.responseCode == 200)
             {
                 Debug.Log("Login exitoso"); // no ponerlo solo en consola
-                
+
+                AuthData data = JsonUtility.FromJson<AuthData>(request.downloadHandler.text);
+                Debug.Log(data.token);
             }
             else
             {
