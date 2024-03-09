@@ -6,28 +6,30 @@ using TMPro;
 using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.SocialPlatforms.Impl;
 
 public class Pato : MonoBehaviour
 {
     public float moveSpeed = 5f;
-    [SerializeField]private Animator animator;
-    [SerializeField] private TMP_Text Puntaje;
-    [SerializeField] private TMP_Text TablaP;
+    [SerializeField] private Animator animator;
+    [SerializeField] private TextMeshProUGUI[] tableScore;
     private bool isMoving;
     [SerializeField] private ScoreManager scoreManager;
     [SerializeField] private float tiempo;
     [SerializeField] private GameObject Player;
     [SerializeField] private GameObject PanelGameOver;
     [SerializeField] private GameObject PanelPuntaje;
-    public Usuario Usuario { get; set; }
+    public Usuario usuario;
     string url = "https://sid-restapi.onrender.com";
-    public string Token { get; set; }
-    public string Username { get; set; }
+    public string Token;
+    public string Username;
     void Start()
     {
-        Usuario = new Usuario();
-        Usuario.username = PlayerPrefs.GetString("username");
-        Usuario.data = new UserData(); // Initialize the data property
+        scoreManager = FindAnyObjectByType<ScoreManager>();
+        usuario = scoreManager.usuario;
+        Token = PlayerPrefs.GetString("token");
+        Username = PlayerPrefs.GetString("username");
+        //Usuario.username = PlayerPrefs.GetString("username");
 
         if (scoreManager == null)
         {
@@ -43,8 +45,7 @@ public class Pato : MonoBehaviour
     {
         HandleMovement();
         HandleAnimation();
-        Puntaje.text = "Puntaje: " + Usuario.data.score;
-        Debug.Log(Usuario.data.score);
+
     }
 
     void HandleMovement()
@@ -99,10 +100,14 @@ public class Pato : MonoBehaviour
 
                 Debug.Log("El usuario " + data.usuario.username + "se encuentra autenticado y su puntaje es " + data.usuario.data.score);
 
-                Usuario[] usuarios = new Usuario[10];
-                Usuario[] usuariosOrganizados = usuarios.OrderByDescending(user => user.data.score).Take(5).ToArray();
+                Usuario[] usuarios = data.usuarios;
+                Usuario[] usuariosOrganizados = data.usuarios.OrderByDescending(user => user.data.score).Take(5).ToArray();
 
-                TablaP.text = usuariosOrganizados.ToString();
+                for (int i = 0; i < 5; i++)
+                {
+                    tableScore[i].text = usuariosOrganizados[i].username + usuariosOrganizados[i].data.score;
+                }
+                
 
             }
             else
@@ -112,10 +117,44 @@ public class Pato : MonoBehaviour
             }
         }
     }
+    IEnumerator SetScore(string json)
+    {
+        UnityWebRequest request = UnityWebRequest.Put(url + "/api/usuarios", json);
+        request.method = "PATCH";
+        request.SetRequestHeader("Content-Type", "application/json");
+        request.SetRequestHeader("x-token", Token);
+        Debug.Log("Send request SetScore");
+        yield return request.SendWebRequest();
+
+        if (request.result == UnityWebRequest.Result.ConnectionError)
+        {
+            Debug.Log(request.error);
+        }
+        else
+        {
+            Debug.Log(request.GetResponseHeader("Content-Type"));
+            Debug.Log(request.downloadHandler.text);
+
+            if (request.responseCode == 200)
+            {
+                Debug.Log("SetScore exitoso");
+                
+                
+
+            }
+            else
+            {
+                Debug.Log(request.responseCode + "|" + request.error);
+            }
+        }
+    }
     private void EndGame()
     {
         Player.gameObject.SetActive(false);
-
+        Usuario user = new Usuario();
+        user.username = PlayerPrefs.GetString("username");
+        user.data.score = scoreManager.Score;
+        StartCoroutine("SetScore", JsonUtility.ToJson(usuario));
         Debug.Log("Game Over!");
         // You can load a new scene, display a game over message, or perform any other desired actions
     }

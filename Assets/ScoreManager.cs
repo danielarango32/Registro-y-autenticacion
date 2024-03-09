@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -11,36 +12,40 @@ public class ScoreManager : MonoBehaviour
     public int Score = 0;
     private string Token;
 
-    public Usuario Usuario {  get; set; }
+    [SerializeField] private TMP_Text Puntaje;
+
+    public Usuario usuario;
 
     void Start()
     {
-        Usuario = new Usuario();
-        Usuario.username = PlayerPrefs.GetString("username");
-        Usuario.data = new UserData();
+        usuario = new Usuario();
+        usuario.username = PlayerPrefs.GetString("username");
+        usuario.data = new UserData();
         Token = PlayerPrefs.GetString("token");
     }
     void Awake()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-
+        //if (Instance == null)
+        //{
+        //Instance = this;
+        //DontDestroyOnLoad(gameObject);
+        //}
+        //else
+        //{
+        //Destroy(gameObject);
+        //}
+        
         LoadPlayerScore();
     }
 
     public void AddScore(int scoreToAdd)
     {
-        if (Usuario != null && Usuario.data != null)
+
+        if (usuario != null && usuario.data != null)
         {
-            Usuario.data.score += scoreToAdd;
-            StartCoroutine("SetScore", JsonUtility.ToJson(Usuario));
+            usuario.data.score += scoreToAdd;
+            Score = usuario.data.score;
+            Puntaje.text = "Puntaje: " + Score;
         }
         else
         {
@@ -62,37 +67,8 @@ public class ScoreManager : MonoBehaviour
     void LoadPlayerScore()
     {
         Score = PlayerPrefs.GetInt("Score", 0);
+
     }
 
-    IEnumerator SetScore(string json)
-    {
-        UnityWebRequest request = UnityWebRequest.Put(url + "/api/usuarios", json);
-        request.method = "PATCH";
-        request.SetRequestHeader("Content-Type", "application/json");
-        request.SetRequestHeader("x-token", Token);
-        Debug.Log("Send request SetScore");
-        yield return request.SendWebRequest();
-
-        if (request.result == UnityWebRequest.Result.ConnectionError)
-        {
-            Debug.Log(request.error);
-        }
-        else
-        {
-            Debug.Log(request.GetResponseHeader("Content-Type"));
-            Debug.Log(request.downloadHandler.text);
-
-            if (request.responseCode == 200)
-            {
-                Debug.Log("SetScore exitoso");
-                AuthData data = JsonUtility.FromJson<AuthData>(request.downloadHandler.text);
-                Score = data.usuario.data.score;
-
-            }
-            else
-            {
-                Debug.Log(request.responseCode + "|" + request.error);
-            }
-        }
-    }
+    
 }

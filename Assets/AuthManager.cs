@@ -159,6 +159,7 @@ public class AuthData
     public string username;
     public string password;
     public Usuario usuario;
+    public Usuario[] usuarios;
     public string token;
     public int score;
 }
@@ -169,6 +170,10 @@ public class Usuario
     public string _id;
     public string username;
     public UserData data;
+    public Usuario()
+    {
+        data = new UserData();
+    }
 
 }
 
