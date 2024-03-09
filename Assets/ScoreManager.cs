@@ -17,6 +17,7 @@ public class ScoreManager : MonoBehaviour
     {
         Usuario = new Usuario();
         Usuario.username = PlayerPrefs.GetString("username");
+        Usuario.data = new UserData();
         Token = PlayerPrefs.GetString("token");
     }
     void Awake()
@@ -34,13 +35,17 @@ public class ScoreManager : MonoBehaviour
         LoadPlayerScore();
     }
 
-    public void AddScore(int score)
+    public void AddScore(int scoreToAdd)
     {
-        //Score = Score + 1;
-        //score = Score;
-        Usuario.data.score = score;
-        StartCoroutine("SetScore", JsonUtility.ToJson(Usuario));
-        
+        if (Usuario != null && Usuario.data != null)
+        {
+            Usuario.data.score += scoreToAdd;
+            StartCoroutine("SetScore", JsonUtility.ToJson(Usuario));
+        }
+        else
+        {
+            Debug.LogWarning("Usuario or Usuario.data is null!");
+        }
     }
     void OnDestroy()
     {
@@ -79,8 +84,10 @@ public class ScoreManager : MonoBehaviour
 
             if (request.responseCode == 200)
             {
-                Debug.Log("SetScore exitoso"); // no ponerlo solo en consola
-                
+                Debug.Log("SetScore exitoso");
+                AuthData data = JsonUtility.FromJson<AuthData>(request.downloadHandler.text);
+                Score = data.usuario.data.score;
+
             }
             else
             {

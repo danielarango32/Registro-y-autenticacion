@@ -151,11 +151,30 @@ public class AuthManager : MonoBehaviour
             }
         }
     }
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }
 
+[System.Serializable]
+public class AuthData
+{
+    public string username;
+    public string password;
+    public Usuario usuario;
+    public string token;
+    public int score;
+}
 
+[System.Serializable]
+public class Usuario
+{
+    public string _id;
+    public string username;
+    public UserData data;
+
+}
+
+[System.Serializable]
+public class UserData
+{
+    public int score;
+    public string appId;
+}
