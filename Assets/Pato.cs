@@ -6,6 +6,7 @@ using TMPro;
 using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.SceneManagement;
 using UnityEngine.SocialPlatforms.Impl;
 
 public class Pato : MonoBehaviour
@@ -158,6 +159,16 @@ public class Pato : MonoBehaviour
         
         Debug.Log("Game Over!");
         // You can load a new scene, display a game over message, or perform any other desired actions
+    }
+
+    private void Exit()
+    {
+        Application.Quit();
+    }
+
+    private void Menu()
+    {
+        SceneManager.LoadScene("Menu");
     }
 }
 
