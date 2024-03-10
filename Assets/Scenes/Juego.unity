@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.6793234, g: 0.7328701, b: 0.80467707, a: 1}
+  m_IndirectSpecularColor: {r: 0.63626117, g: 0.7016772, b: 0.78729385, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -619,6 +619,8 @@ MonoBehaviour:
     data:
       score: 0
       appId: 
+  Token: 
+  Username: 
 --- !u!1 &657086884
 GameObject:
   m_ObjectHideFlags: 0
@@ -1081,7 +1083,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 964666852}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 572024097}
+        m_TargetAssemblyTypeName: Pato, Assembly-CSharp
+        m_MethodName: Menu
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &964666852
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1470,7 +1484,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1143831479}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 572024097}
+        m_TargetAssemblyTypeName: Pato, Assembly-CSharp
+        m_MethodName: Exit
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1143831479
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2277,7 +2303,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1411124945
 RectTransform:
   m_ObjectHideFlags: 0

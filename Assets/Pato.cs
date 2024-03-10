@@ -161,12 +161,12 @@ public class Pato : MonoBehaviour
         // You can load a new scene, display a game over message, or perform any other desired actions
     }
 
-    private void Exit()
+    public void Exit()
     {
         Application.Quit();
     }
 
-    private void Menu()
+    public void Menu()
     {
         SceneManager.LoadScene("Menu");
     }
