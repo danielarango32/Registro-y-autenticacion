@@ -142,6 +142,7 @@ public class AuthManager : MonoBehaviour
 
                 Debug.Log("El usuario " + data.usuario.username + "se encuentra autenticado y su puntaje es " + data.usuario.data.score);
 
+
                 PanelMenu.SetActive(true);
             }
             else

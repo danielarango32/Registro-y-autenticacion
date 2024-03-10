@@ -79,7 +79,7 @@ public class Pato : MonoBehaviour
 
     private IEnumerator Tabla()
     {
-        UnityWebRequest request = UnityWebRequest.Get(url + "/api/usuarios/" + Username);
+        UnityWebRequest request = UnityWebRequest.Get(url + "/api/usuarios/");
 
         request.SetRequestHeader("x-token", Token);
         Debug.Log("Send request GetProfile");
@@ -98,14 +98,14 @@ public class Pato : MonoBehaviour
 
                 AuthData data = JsonUtility.FromJson<AuthData>(request.downloadHandler.text);
 
-                Debug.Log("El usuario " + data.usuario.username + "se encuentra autenticado y su puntaje es " + data.usuario.data.score);
+                Debug.Log("El usuario " + data.usuario.username + " se encuentra autenticado y su puntaje es " + data.usuario.data.score);
 
                 Usuario[] usuarios = data.usuarios;
-                Usuario[] usuariosOrganizados = data.usuarios.OrderByDescending(user => user.data.score).Take(5).ToArray();
+                Usuario[] usuariosOrganizados = usuarios.OrderByDescending(user => user.data.score).Take(5).ToArray();
 
                 for (int i = 0; i < 5; i++)
                 {
-                    tableScore[i].text = usuariosOrganizados[i].username + usuariosOrganizados[i].data.score;
+                    tableScore[i].text = usuariosOrganizados[i].username + "      " + usuariosOrganizados[i].data.score;
                 }
                 
 
@@ -150,11 +150,12 @@ public class Pato : MonoBehaviour
     }
     private void EndGame()
     {
-        Player.gameObject.SetActive(false);
         Usuario user = new Usuario();
         user.username = PlayerPrefs.GetString("username");
         user.data.score = scoreManager.Score;
-        StartCoroutine("SetScore", JsonUtility.ToJson(usuario));
+        StartCoroutine("SetScore", JsonUtility.ToJson(user));
+        Player.gameObject.SetActive(false);
+        
         Debug.Log("Game Over!");
         // You can load a new scene, display a game over message, or perform any other desired actions
     }
